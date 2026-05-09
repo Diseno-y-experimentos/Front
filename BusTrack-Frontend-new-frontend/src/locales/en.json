@@ -1,0 +1,649 @@
+{
+  "option": {
+    "home": "Home",
+    "about": "About",
+    "categories": "Search routes",
+    "notifications": "Notifications",
+    "busstops": "Bus Stops",
+    "profile": "Profile"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "clearAll": "Clear all",
+    "confirmClearAll": "Do you want to delete all notifications?",
+    "empty": {
+      "title": "You have no notifications",
+      "subtitle": "When you save routes or there are updates, they will appear here"
+    },
+    "remove": "Remove notification",
+    "timeAgo": {
+      "now": "Now",
+      "minutesAgo": "{minutes} min ago",
+      "hoursAgo": "{hours} h ago",
+      "daysAgo": "{days} days ago"
+    },
+    "messages": {
+      "default": "New notification",
+      "routeSaved": "Route \"{routeName}\" saved to favorites",
+      "routeRemoved": "Route \"{routeName}\" removed from favorites",
+      "busArriving": "Bus {busNumber} will arrive in {minutes} minutes",
+      "routeDelayed": "Route {routeName} delayed {delay} minutes",
+      "locationEnabled": "Location enabled successfully",
+      "locationError": "Error getting your location",
+      "noRoutesFound": "No routes found",
+      "routeUpdated": "Route information updated",
+      "favoriteAdded": "Added to favorites",
+      "favoriteRemoved": "Removed from favorites",
+      "busDelayed": "Bus {busNumber} is {delayMinutes} minutes delayed at {stopName}",
+      "notificationConfigured": "Notification configured for {stopName}",
+      "alreadyConfigured": "You already have notifications configured for {stopName}",
+      "routeDetour": "Bus {busNumber} changed route: {originalRoute} → {newRoute}. Reason: {reason}",
+      "connectionError": "No connection. Notifications will be sent when you're back online"
+    }
+  },
+  "profile-notifications": {
+    "back": "Back",
+    "title": "Notifications",
+    "bus_arrival": "Bus arrival",
+    "delays": "Delays",
+    "nearby_stops": "Nearby stops",
+    "trip_start": "Trip start",
+    "on": "ON",
+    "off": "OFF",
+    "save": "Save Changes",
+    "changes_saved": "Settings saved successfully"
+  },
+  "travel_history": {
+    "title": "Travel History",
+    "back": "Back",
+    "on_foot": "On foot",
+    "campus_san_miguel": "UPC - San Miguel Campus",
+    "rafael_escardo_stop": "Rafael Escardó Stop",
+    "santa_maria": "Santa María",
+    "cadiz": "Cádiz",
+    "campus_san_isidro": "UPC - San Isidro Campus",
+    "san_ignacio": "San Ignacio",
+    "la_encalada": "La Encalada",
+    "campus_monterrico": "UPC - Monterrico Campus"
+  },
+  "authoring-phrase": {
+    "intro": "Made with",
+    "use": "using",
+    "author": "by {brand} Developer Team"
+  },
+  "about": {
+    "title": "About Us",
+    "content": "BusTrack is a mobilization Platform, part of DelComp Corporation."
+  },
+  "home": {
+    "searchTitle": "Search route",
+    "gettingLocation": "Getting location...",
+    "locationUnavailable": "Location unavailable",
+    "locationError": "Error getting location",
+    "defaultLocation": "Lima, Peru",
+    "loadingMap": "Loading map...",
+    "showingRoute": "Showing route",
+    "backToLocation": "Back to current location",
+    "newSearch": "New search"
+  },
+  "searchRoute": {
+    "from": "From",
+    "to": "To",
+    "fromPlaceholder": "Enter origin",
+    "toPlaceholder": "Enter destination",
+    "search": "Search"
+  },
+  "page-not-found": {
+    "title": "Page Not Found",
+    "content": "The path {unavailable-route} is not available.",
+    "go-home": "Go Home"
+  },
+  "profile": {
+    "title": "Profile",
+    "name": "Name",
+    "email": "Gmail",
+    "password": "Password",
+    "favoriteRoutes": "Favorite Routes",
+    "travelHistory": "Travel History",
+    "notifications": "Notifications",
+    "accountSettings": "Account Settings",
+    "details": "Details",
+    "logout": "Logout"
+  },
+  "favoriteRoutes": {
+    "back": "Back",
+    "title": "Favorite routes",
+    "emptyTitle": "You don't have any saved routes",
+    "emptySubtitle": "Save your frequent routes to access them quickly",
+    "searchButton": "Search routes",
+    "origin": "Origin",
+    "destination": "Destination",
+    "viewRoute": "View route",
+    "googleMaps": "Google Maps",
+    "deleteTooltip": "Remove route from favorites",
+    "confirmDelete": "re you sure you want to remove this route from your favorites?",
+    "removed": "Route removed from favorites"
+  },
+  "accountSettings": {
+    "back": "Back",
+    "title": "Account Settings",
+    "changePhoto": "Change Photo",
+    "name": "Name",
+    "namePlaceholder": "Enter your name",
+    "email": "Email",
+    "emailPlaceholder": "Enter your email",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "saveChanges": "Save Changes",
+
+    "photoSoon": "This feature will be available soon",
+    "errorAllFields": "Please fill in all fields",
+    "errorInvalidEmail": "Please enter a valid email",
+    "errorShortPassword": "The password must be at least 6 characters",
+    "saveSuccess": "Changes saved successfully",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password"
+  },
+  "errors": {
+    "occurred": "Errors occurred",
+    "general": "ERROR",
+
+    "auth": {
+      "invalidCredentials": "Incorrect username or password",
+      "userNotFound": "User not found",
+      "emailAlreadyExists": "This email is already registered",
+      "usernameAlreadyExists": "This username is already taken",
+      "passwordTooShort": "Password must be at least 6 characters",
+      "passwordMismatch": "Passwords do not match",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Invalid email",
+      "usernameRequired": "Username is required",
+      "passwordRequired": "Password is required",
+      "sessionExpired": "Your session has expired",
+      "unauthorizedAccess": "Unauthorized access"
+    },
+
+    "form": {
+      "requiredField": "This field is required",
+      "invalidFormat": "Invalid format",
+      "minLength": "Minimum {min} characters",
+      "maxLength": "Maximum {max} characters",
+      "invalidEmail": "Invalid email address",
+      "invalidPhone": "Invalid phone number",
+      "invalidUrl": "Invalid URL"
+    },
+
+    "network": {
+      "connectionError": "Connection error",
+      "timeout": "Request timed out",
+      "serverError": "Server error",
+      "notFound": "Resource not found",
+      "forbidden": "Access forbidden",
+      "offline": "No internet connection"
+    },
+
+    "data": {
+      "loadFailed": "Failed to load data",
+      "saveFailed": "Failed to save",
+      "deleteFailed": "Failed to delete",
+      "updateFailed": "Failed to update",
+      "notFound": "Data not found",
+      "invalidData": "Invalid data"
+    },
+
+    "file": {
+      "uploadFailed": "Failed to upload file",
+      "invalidType": "File type not allowed",
+      "tooLarge": "File is too large",
+      "notFound": "File not found"
+    },
+
+    "validation": {
+      "required": "Required field",
+      "email": "Invalid email",
+      "phone": "Invalid phone",
+      "url": "Invalid URL",
+      "number": "Must be a number",
+      "min": "Minimum value is {min}",
+      "max": "Maximum value is {max}",
+      "pattern": "Invalid format"
+    },
+
+    "company": {
+      "notFound": "Company not found",
+      "registrationFailed": "Failed to register company",
+      "updateFailed": "Failed to update information",
+      "rucInvalid": "Invalid RUC",
+      "fleetSizeInvalid": "Invalid fleet size"
+    },
+
+    "bus": {
+      "notFound": "Bus not found",
+      "addFailed": "Failed to add bus",
+      "updateFailed": "Failed to update bus",
+      "deleteFailed": "Failed to delete bus",
+      "plateInvalid": "Invalid plate",
+      "plateExists": "This plate is already registered"
+    },
+
+    "route": {
+      "notFound": "Route not found",
+      "saveFailed": "Failed to save route",
+      "searchFailed": "Failed to search routes",
+      "invalidOrigin": "Invalid origin",
+      "invalidDestination": "Invalid destination"
+    },
+
+    "location": {
+      "permissionDenied": "Location permission denied",
+      "unavailable": "Location unavailable",
+      "timeout": "Location timeout",
+      "unknown": "Unknown location error"
+    },
+
+    "settings": {
+      "saveFailed": "Failed to save settings",
+      "loadFailed": "Failed to load settings",
+      "invalidValue": "Invalid value"
+    },
+
+    "unexpected": "Unexpected error. Please try again.",
+    "tryAgain": "Please try again",
+    "contactSupport": "If the problem persists, contact support"
+  },
+  "brand": {
+    "name": "BusTrack"
+  },
+  "nav": {
+    "searchRoute": "Search route",
+    "notifications": "Notifications",
+    "busStops": "Nearby stops",
+    "profile": "Profile"
+  },
+  "auth": {
+    "login": {
+      "title": "Log In",
+      "continueWithGoogle": "Continue with Google",
+      "username": "Gmail",
+      "emailOrUsername": "Email or username",
+      "emailOrUsernamePlaceholder": "Enter your gmail",
+      "password": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "forgot": "Forgot your password?",
+      "continue": "Continue",
+      "continuing": "Continuing...",
+      "submit": "Log In",
+      "noAccount": "Don't have an account?",
+      "register": "Log In",
+      "createAccount": "Create one",
+      "errors": {
+        "usernameRequired": "Enter your username",
+        "passwordRequired": "Enter your password",
+        "auth": {
+          "invalidCredentials": "Incorrect username or password"
+        },
+        "tryAgain": "Try again"
+      }
+    },
+    "register": {
+      "title": "Create your account",
+      "continueWithGoogle": "Continue with Google",
+      "email": "Email",
+      "emailPlaceholder": "Enter your email",
+      "username": "Username",
+      "usernamePlaceholder": "Choose a username",
+      "password": "Password",
+      "passwordPlaceholder": "Enter at least 6 characters",
+      "create": "Create Account",
+      "haveAccount": "Already have an account?",
+      "signIn": "Sign In",
+      "errors": {
+        "emailRequired": "Enter your email",
+        "emailInvalid": "Invalid email",
+        "usernameRequired": "Enter your username",
+        "passwordMin": "At least 6 characters",
+        "confirmRequired": "Confirm your password",
+        "confirmMismatch": "Passwords do not match"
+      },
+      "confirmPassword": "Confirm your password",
+      "confirmPasswordPlaceholder": "Enter your password"
+    }
+  },
+  "routeForm": {
+    "originLabel": "Origin address",
+    "placeholder": "Enter the address",
+    "search": "Search",
+    "searching": "Searching...",
+    "success": "✅ Route found successfully",
+    "notFound": "No routes found.",
+    "estimatedTime": "Estimated route time:",
+    "nextBus": "Next bus in:"
+  },
+  "routeResults": {
+    "title": "Your trip information",
+    "origin": "Origin",
+    "destination": "Destination",
+    "saveRoute": "Save route",
+    "saving": "Saving...",
+    "openInGoogleMaps": "View routes on Google Maps",
+    "saveSuccess": "✓ Route saved successfully",
+    "saveError": "An error occurred while saving the route"
+  },
+  "busStops": {
+    "title": "Nearby Stops",
+    "passingBuses": "Buses passing:",
+    "directions": "Directions",
+    "notifyArrival": "Notify arrival",
+    "loading": "Loading Nearby Stops..."
+  },
+  "travelHistory": {
+    "back": "Back",
+    "title": "Travel history",
+    "clearHistory": "Clear user history",
+    "emptyTitle": "No travel history yet",
+    "emptySubtitle": "Your searched routes will appear here",
+    "searchRoute": "Search a route",
+    "repeatTooltip": "Search this route again"
+  },
+  "selectRole": {
+    "title": "How do you want to sign in?",
+    "passenger": "I'm a Passenger",
+    "company": "I'm a Company",
+    "continue": "Continue",
+    "error": "Select a user type"
+  },
+  "passenger": {
+    "loginTitle": "PASSENGERS"
+  },
+  "company": {
+    "loginTitle": "COMPANY",
+    "busImageAlt": "Company bus"
+  },
+  "companyRegister": {
+    "register": {
+      "title": "Create your account",
+      "companyName": "Company name",
+      "companyNamePlaceholder": "Enter the company name",
+      "ruc": "Tax ID",
+      "rucPlaceholder": "Enter the tax ID",
+      "corporateEmail": "Corporate email",
+      "corporateEmailPlaceholder": "Enter corporate email",
+      "address": "Address",
+      "addressPlaceholder": "Enter the address",
+      "password": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "confirmPassword": "Confirm password",
+      "confirmPasswordPlaceholder": "Confirm your password",
+      "passwordMismatch": "Passwords do not match",
+      "fleetSize": "Fleet size",
+      "fleetSizePlaceholder": "Enter number of buses",
+      "submit": "Create Account",
+      "alreadyHaveAccount": "Already have an account?",
+      "loginLink": "Sign In"
+    }
+  },
+  "companyNav": {
+    "monitoring": "Monitoring",
+    "alerts": "Alerts",
+    "fleet": "Fleet",
+    "settings": "Settings"
+  },
+  "settings": {
+    "title": "Business Settings",
+    "companyInfo": {
+      "title": "Company Information",
+      "name": "Company Name",
+      "namePlaceholder": "Enter company name",
+      "ruc": "Tax ID",
+      "rucPlaceholder": "Enter tax ID",
+      "address": "Address",
+      "addressPlaceholder": "Enter address"
+    },
+    "alerts": {
+      "title": "Alert Preferences",
+      "delayMinutes": "Delay Minutes for Alert",
+      "types": "Alert Types",
+      "delays": "Delays",
+      "routeDeviations": "Route deviations",
+      "incidents": "Incidents",
+      "maintenance": "Maintenance",
+      "traffic": "Heavy traffic"
+    },
+    "security": {
+      "title": "Security",
+      "currentPassword": "Current Password",
+      "currentPasswordPlaceholder": "Enter current password",
+      "newPassword": "New Password",
+      "newPasswordPlaceholder": "Enter new password",
+      "confirmPassword": "Confirm New Password",
+      "confirmPasswordPlaceholder": "Confirm new password"
+    },
+    "actions": {
+      "saveChanges": "Save Changes",
+      "changePassword": "Change Password",
+      "logout": "Logout"
+    },
+    "messages": {
+      "companySaved": "Information saved successfully",
+      "preferencesSaved": "Preferences saved successfully",
+      "passwordChanged": "Password changed successfully",
+      "passwordMismatch": "Passwords do not match",
+      "confirmLogout": "Are you sure you want to logout?"
+    },
+    "errors": {
+      "companyNameRequired": "Company name is required",
+      "currentPasswordRequired": "Enter your current password",
+      "newPasswordRequired": "Enter your new password",
+      "passwordTooShort": "The new password must be at least 6 characters long",
+      "currentPasswordIncorrect": "The current password is incorrect",
+      "passwordChangeFailed": "Error changing the password"
+    }
+  },
+  "fleet": {
+    "title": "Fleet Management",
+    "stats": {
+      "total": "Total buses",
+      "active": "Active",
+      "maintenance": "Under maintenance",
+      "inactive": "Inactive"
+    },
+    "table": {
+      "id": "Bus ID",
+      "plate": "License Plate",
+      "route": "Assigned Route",
+      "status": "Status",
+      "driver": "Driver",
+      "actions": "Actions"
+    },
+    "status": {
+      "active": "Active",
+      "maintenance": "Maintenance",
+      "inactive": "Inactive"
+    },
+    "actions": {
+      "addBus": "Add Bus",
+      "edit": "Edit",
+      "details": "Details",
+      "delete": "Delete",
+      "save": "Save",
+      "cancel": "Cancel",
+      "close": "Close"
+    },
+    "modal": {
+      "addTitle": "Add New Bus",
+      "editTitle": "Edit Bus",
+      "detailsTitle": "Bus Details"
+    },
+    "form": {
+      "id": "Bus ID",
+      "plate": "License Plate",
+      "platePlaceholder": "Ex: ABC-123",
+      "route": "Assigned Route",
+      "routePlaceholder": "Ex: Miraflores - San Isidro",
+      "status": "Status",
+      "driver": "Driver",
+      "driverPlaceholder": "Driver name"
+    },
+    "messages": {
+      "busAdded": "Bus added successfully",
+      "busUpdated": "Bus updated successfully",
+      "busDeleted": "Bus deleted successfully",
+      "confirmDelete": "Are you sure you want to delete this bus?"
+    }
+  },
+  "alerts": {
+    "title": "Internal Alerts",
+    "empty": "No pending alerts found",
+    "confirmResolve": "Are you sure you want to mark this alert as resolved?",
+    "filters": {
+      "type": "Filter by Type",
+      "severity": "Filter by Severity",
+      "status": "Filter by Status",
+      "allTypes": "All Types",
+      "allSeverities": "All Severities",
+      "allStatus": "All Statuses"
+    },
+    "types": {
+      "detour": "Route Detour Detected",
+      "traffic": "Heavy Traffic",
+      "incident": "Incident Reported",
+      "delay": "Minor Delay"
+    },
+    "severity": {
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low"
+    },
+    "status": {
+      "pending": "Pending",
+      "resolved": "Resolved"
+    },
+    "actions": {
+      "resolve": "Mark as Resolved"
+    },
+    "create": {
+      "button": "New Alert",
+      "title": "Report Incident",
+      "type": "Incident Type",
+      "severity": "Severity Level",
+      "busId": "Bus ID",
+      "busIdPlaceholder": "Ex: 204",
+      "route": "Affected Route",
+      "routePlaceholder": "Ex: Miraflores - Centro",
+      "save": "Publish Alert",
+      "cancel": "Cancel"
+    },
+    "errors": {
+      "missingFields": "Please fill in all fields"
+    }
+  },
+  "monitoring": {
+    "title": "Real-Time Monitoring",
+    "addBus": "Add Bus",
+    "refresh": "Refresh Data",
+    "refreshing": "Loading...",
+    "updated": "Fleet data updated successfully",
+    "confirmDelete": "Are you sure you want to stop monitoring this bus?",
+    "deleteTooltip": "Remove card",
+    "empty": "No buses currently monitored.",
+    "expandMap": "Open in Google Maps",
+    "status": {
+      "on_time": "On Time",
+      "delayed": "Delayed {minutes} min",
+      "delayed_generic": "Delayed",
+      "out_of_service": "Out of Service"
+    },
+    "details": {
+      "route": "Route",
+      "driver": "Driver",
+      "updated": "Last update"
+    },
+    "create": {
+      "title": "Monitor New Bus",
+      "busId": "Bus Number",
+      "route": "Assigned Route",
+      "driver": "Driver",
+      "status": "Initial Status",
+      "save": "Add Bus",
+      "cancel": "Cancel"
+    },
+    "messages": {
+      "busAdded": "Bus {busId} added to dashboard",
+      "busDeleted": "Bus {busId} removed from dashboard"
+    },
+    "errors": {
+      "missingFields": "Please fill in all bus fields"
+    },
+    "connectionError": {
+      "title": "Connection error",
+      "description": "Could not connect to the server. Please try again.",
+      "retry": "Retry"
+    },
+    "alerts": {
+      "title": "Internal Alerts",
+      "empty": "No pending alerts found",
+      "confirmResolve": "Are you sure you want to mark this alert as resolved?",
+      "filters": {
+        "type": "Filter by Type",
+        "severity": "Filter by Severity",
+        "status": "Filter by Status",
+        "allTypes": "All Types",
+        "allSeverities": "All Severities",
+        "allStatus": "All Statuses"
+      },
+      "types": {
+        "detour": "Route Detour Detected",
+        "traffic": "Heavy Traffic",
+        "incident": "Incident Reported",
+        "delay": "Minor Delay"
+      },
+      "severity": {
+        "high": "High",
+        "medium": "Medium",
+        "low": "Low"
+      },
+      "status": {
+        "pending": "Pending",
+        "resolved": "Resolved"
+      },
+      "actions": {
+        "resolve": "Mark as Resolved"
+      },
+      "create": {
+        "button": "New Alert",
+        "title": "Report Incident",
+        "type": "Incident Type",
+        "severity": "Severity Level",
+        "busId": "Bus ID",
+        "busIdPlaceholder": "Ex: 204",
+        "route": "Affected Route",
+        "routePlaceholder": "Ex: Miraflores - Centro",
+        "save": "Publish Alert",
+        "cancel": "Cancel"
+      },
+      "errors": {
+        "missingFields": "Please fill in all fields"
+      }
+    },
+    "register": {
+      "title": "Create your account",
+      "companyName": "Company name",
+      "alreadyHaveAccount": "Already have an account?",
+      "loginLink": "Sign In",
+      "submit": "Create Account",
+      "loading": "Registering...",
+      "success": "Registration successful! You can now log in.",
+      "errors": {
+        "companyNameRequired": "Company name is required",
+        "rucRequired": "Tax ID is required",
+        "emailRequired": "Email is required",
+        "emailInvalid": "Invalid email",
+        "addressRequired": "Address is required",
+        "passwordRequired": "Password is required",
+        "passwordTooShort": "The password must be at least 6 characters",
+        "confirmPasswordRequired": "You must confirm the password",
+        "fleetSizeRequired": "Fleet size is required"
+      }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+[
+  {
+    "id": "ns1",
+    "name": "Rafael Escardó",
+    "latitude": -12.083420,
+    "longitude": -77.075280,
+    "routes": ["201", "204", "1173", "1286", "OMB", "OM36"],
+    "distance": "150 m",
+    "address": "Av. La Marina 2810, San Miguel 15087"
+  },
+  {
+    "id": "ns2",
+    "name": "Hiraoka",
+    "latitude": -12.082560,
+    "longitude": -77.073890,
+    "routes": ["1275", "IMB"],
+    "distance": "500 m",
+    "address": "Av. La Marina 2350, San Miguel 15087"
+  }
+]

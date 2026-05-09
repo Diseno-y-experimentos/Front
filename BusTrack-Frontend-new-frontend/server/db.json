@@ -1,0 +1,414 @@
+{
+  "users": [
+    {
+      "id": "u1",
+      "name": "Juan Pérez",
+      "email": "juan@example.com",
+      "password": "1234",
+      "role": "PASSENGER",
+      "profilePhoto": "juan.jpg"
+    },
+    {
+      "id": "u2",
+      "name": "María López",
+      "email": "maria@example.com",
+      "password": "abcd",
+      "role": "DRIVER",
+      "profilePhoto": "maria.jpg"
+    },
+    {
+      "id": "u3",
+      "name": "Carlos García",
+      "email": "carlos@example.com",
+      "password": "xyz",
+      "role": "ADMIN",
+      "profilePhoto": "carlos.jpg"
+    },
+    {
+      "id": "u4",
+      "name": "Ana Torres",
+      "email": "ana@example.com",
+      "password": "pass",
+      "role": "PASSENGER",
+      "profilePhoto": "ana.png"
+    },
+    {
+      "id": "u5",
+      "name": "Luis Díaz",
+      "email": "luis@example.com",
+      "password": "0000",
+      "role": "DRIVER",
+      "profilePhoto": "luis.png"
+    },
+    {
+      "id": "u6",
+      "name": "Sofía Ramos",
+      "email": "sofia@example.com",
+      "password": "abcd1234",
+      "role": "PASSENGER",
+      "profilePhoto": "sofia.jpg"
+    },
+    {
+      "id": "u7",
+      "name": "Pedro Castillo",
+      "email": "pedro@example.com",
+      "password": "pass123",
+      "role": "DRIVER",
+      "profilePhoto": "pedro.png"
+    },
+    {
+      "id": "u8",
+      "name": "Lucía Fernández",
+      "email": "lucia@example.com",
+      "password": "lucia2025",
+      "role": "PASSENGER",
+      "profilePhoto": "lucia.jpg"
+    },
+    {
+      "id": "u9",
+      "name": "Andrés Salazar",
+      "email": "andres@example.com",
+      "password": "andres2025",
+      "role": "ADMIN",
+      "profilePhoto": "andres.png"
+    },
+    {
+      "id": "u10",
+      "name": "Valeria Medina",
+      "email": "valeria@example.com",
+      "password": "val1234",
+      "role": "PASSENGER",
+      "profilePhoto": "valeria.jpg"
+    }
+  ],
+  "routes": [
+    {
+      "id": "r1",
+      "name": "Ruta Centro",
+      "stops": ["s1", "s2", "s3"],
+      "estimatedTime": 30,
+      "frequency": 15
+    },
+    {
+      "id": "r2",
+      "name": "Ruta Norte",
+      "stops": ["s4", "s5", "s6"],
+      "estimatedTime": 45,
+      "frequency": 20
+    },
+    {
+      "id": "r3",
+      "name": "Ruta Sur",
+      "stops": ["s7", "s8", "s9"],
+      "estimatedTime": 35,
+      "frequency": 25
+    },
+    {
+      "id": "r4",
+      "name": "Ruta Este",
+      "stops": ["s10", "s11"],
+      "estimatedTime": 20,
+      "frequency": 10
+    },
+    {
+      "id": "r5",
+      "name": "Ruta Oeste",
+      "stops": ["s12", "s13", "s14"],
+      "estimatedTime": 40,
+      "frequency": 30
+    },
+    {
+      "id": "r6",
+      "name": "Ruta Callao",
+      "stops": ["s15", "s16", "s17"],
+      "estimatedTime": 50,
+      "frequency": 20
+    },
+    {
+      "id": "r7",
+      "name": "Ruta Miraflores",
+      "stops": ["s18", "s19"],
+      "estimatedTime": 25,
+      "frequency": 15
+    },
+    {
+      "id": "r8",
+      "name": "Ruta San Isidro",
+      "stops": ["s20", "s21", "s22"],
+      "estimatedTime": 30,
+      "frequency": 20
+    },
+    {
+      "id": "r9",
+      "name": "Ruta Ate",
+      "stops": ["s23", "s24", "s25"],
+      "estimatedTime": 55,
+      "frequency": 25
+    },
+    {
+      "id": "r10",
+      "name": "Ruta Comas",
+      "stops": ["s26", "s27", "s28"],
+      "estimatedTime": 60,
+      "frequency": 30
+    }
+  ],
+  "busstops": [
+    { "id": "s1", "name": "Paradero Plaza Mayor" },
+    { "id": "s2", "name": "Paradero Av. Grau" },
+    { "id": "s3", "name": "Paradero Av. Tacna" },
+    { "id": "s4", "name": "Paradero Los Olivos" },
+    { "id": "s5", "name": "Paradero MegaPlaza" },
+    { "id": "s6", "name": "Paradero Pro" },
+    { "id": "s7", "name": "Paradero Villa El Salvador" },
+    { "id": "s8", "name": "Paradero Lurín" },
+    { "id": "s9", "name": "Paradero Chorrillos" },
+    { "id": "s10", "name": "Paradero La Molina" }
+  ],
+  "travels": [
+    {
+      "id": "t1",
+      "passengerId": "u1",
+      "routeId": "r1",
+      "startTime": "2025-10-04T07:30:00",
+      "endTime": "2025-10-04T08:00:00",
+      "duration": 30
+    },
+    {
+      "id": "t2",
+      "passengerId": "u4",
+      "routeId": "r2",
+      "startTime": "2025-10-04T09:00:00",
+      "endTime": "2025-10-04T09:40:00",
+      "duration": 40
+    },
+    {
+      "id": "t3",
+      "passengerId": "u1",
+      "routeId": "r3",
+      "startTime": "2025-10-04T10:00:00",
+      "endTime": "2025-10-04T10:35:00",
+      "duration": 35
+    },
+    {
+      "id": "t4",
+      "passengerId": "u4",
+      "routeId": "r4",
+      "startTime": "2025-10-04T11:15:00",
+      "endTime": "2025-10-04T11:35:00",
+      "duration": 20
+    },
+    {
+      "id": "t5",
+      "passengerId": "u1",
+      "routeId": "r5",
+      "startTime": "2025-10-04T12:00:00",
+      "endTime": "2025-10-04T12:40:00",
+      "duration": 40
+    },
+    {
+      "id": "t6",
+      "passengerId": "u6",
+      "routeId": "r6",
+      "startTime": "2025-10-04T13:00:00",
+      "endTime": "2025-10-04T13:50:00",
+      "duration": 50
+    },
+    {
+      "id": "t7",
+      "passengerId": "u8",
+      "routeId": "r7",
+      "startTime": "2025-10-04T14:00:00",
+      "endTime": "2025-10-04T14:25:00",
+      "duration": 25
+    },
+    {
+      "id": "t8",
+      "passengerId": "u10",
+      "routeId": "r8",
+      "startTime": "2025-10-04T15:10:00",
+      "endTime": "2025-10-04T15:40:00",
+      "duration": 30
+    },
+    {
+      "id": "t9",
+      "passengerId": "u6",
+      "routeId": "r9",
+      "startTime": "2025-10-04T16:00:00",
+      "endTime": "2025-10-04T16:55:00",
+      "duration": 55
+    },
+    {
+      "id": "t10",
+      "passengerId": "u8",
+      "routeId": "r10",
+      "startTime": "2025-10-04T17:30:00",
+      "endTime": "2025-10-04T18:30:00",
+      "duration": 60
+    }
+  ],
+  "buses": [
+    {
+      "id": "b1",
+      "licensePlate": "ABC-123",
+      "capacity": 40,
+      "currentLocation": "Plaza Mayor",
+      "status": "ACTIVE",
+      "currentRoute": "r1"
+    },
+    {
+      "id": "b2",
+      "licensePlate": "XYZ-456",
+      "capacity": 35,
+      "currentLocation": "Los Olivos",
+      "status": "INACTIVE",
+      "currentRoute": "r2"
+    },
+    {
+      "id": "b3",
+      "licensePlate": "LMN-789",
+      "capacity": 50,
+      "currentLocation": "Av. Grau",
+      "status": "ACTIVE",
+      "currentRoute": "r3"
+    },
+    {
+      "id": "b4",
+      "licensePlate": "PQR-321",
+      "capacity": 45,
+      "currentLocation": "MegaPlaza",
+      "status": "MAINTENANCE",
+      "currentRoute": "r4"
+    },
+    {
+      "id": "b5",
+      "licensePlate": "JKL-654",
+      "capacity": 30,
+      "currentLocation": "Av. Tacna",
+      "status": "ACTIVE",
+      "currentRoute": "r5"
+    },
+    {
+      "id": "b6",
+      "licensePlate": "OPQ-111",
+      "capacity": 40,
+      "currentLocation": "Callao",
+      "status": "ACTIVE",
+      "currentRoute": "r6"
+    },
+    {
+      "id": "b7",
+      "licensePlate": "RST-222",
+      "capacity": 35,
+      "currentLocation": "Miraflores",
+      "status": "ACTIVE",
+      "currentRoute": "r7"
+    },
+    {
+      "id": "b8",
+      "licensePlate": "UVW-333",
+      "capacity": 45,
+      "currentLocation": "San Isidro",
+      "status": "INACTIVE",
+      "currentRoute": "r8"
+    },
+    {
+      "id": "b9",
+      "licensePlate": "XYZ-444",
+      "capacity": 50,
+      "currentLocation": "Ate",
+      "status": "ACTIVE",
+      "currentRoute": "r9"
+    },
+    {
+      "id": "b10",
+      "licensePlate": "ABC-555",
+      "capacity": 40,
+      "currentLocation": "Comas",
+      "status": "MAINTENANCE",
+      "currentRoute": "r10"
+    }
+  ],
+  "notifications": [
+    {
+      "id": "n1",
+      "recipientId": "u1",
+      "message": "Tu bus llegará en 5 minutos",
+      "sentAt": "2025-10-04T07:25:00",
+      "type": "ARRIVAL_ALERT",
+      "status": "SENT"
+    },
+    {
+      "id": "n2",
+      "recipientId": "u2",
+      "message": "Tu turno inició",
+      "sentAt": "2025-10-04T07:00:00",
+      "type": "SECURITY_ALERT",
+      "status": "READ"
+    },
+    {
+      "id": "n3",
+      "recipientId": "u4",
+      "message": "Tu bus se retrasó 10 minutos",
+      "sentAt": "2025-10-04T08:50:00",
+      "type": "DELAY_ALERT",
+      "status": "DELIVERED"
+    },
+    {
+      "id": "n4",
+      "recipientId": "u5",
+      "message": "Mantenimiento programado para mañana",
+      "sentAt": "2025-10-04T09:00:00",
+      "type": "SECURITY_ALERT",
+      "status": "SENT"
+    },
+    {
+      "id": "n5",
+      "recipientId": "u3",
+      "message": "Se ha registrado un incidente en Ruta Norte",
+      "sentAt": "2025-10-04T09:30:00",
+      "type": "SECURITY_ALERT",
+      "status": "DELIVERED"
+    },
+    {
+      "id": "n6",
+      "recipientId": "u6",
+      "message": "Tu bus de la Ruta Callao ha salido",
+      "sentAt": "2025-10-04T10:30:00",
+      "type": "ARRIVAL_ALERT",
+      "status": "SENT"
+    },
+    {
+      "id": "n7",
+      "recipientId": "u7",
+      "message": "Nueva asignación de turno",
+      "sentAt": "2025-10-04T11:00:00",
+      "type": "SECURITY_ALERT",
+      "status": "DELIVERED"
+    },
+    {
+      "id": "n8",
+      "recipientId": "u8",
+      "message": "Se detectó tráfico en Ruta Sur",
+      "sentAt": "2025-10-04T11:30:00",
+      "type": "DELAY_ALERT",
+      "status": "SENT"
+    },
+    {
+      "id": "n9",
+      "recipientId": "u9",
+      "message": "Actualización del sistema completada",
+      "sentAt": "2025-10-04T12:00:00",
+      "type": "SYSTEM_ALERT",
+      "status": "READ"
+    },
+    {
+      "id": "n10",
+      "recipientId": "u10",
+      "message": "Tu bus llegará en 3 minutos",
+      "sentAt": "2025-10-04T12:10:00",
+      "type": "ARRIVAL_ALERT",
+      "status": "SENT"
+    }
+  ]
+}
