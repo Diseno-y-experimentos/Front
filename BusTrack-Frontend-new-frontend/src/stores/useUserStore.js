@@ -295,7 +295,7 @@ export const useUserStore = defineStore('user', () => {
     /**
      * Restore session (Mantiene la sesión si el usuario recarga la página)
      */
-    function restoreSession() {
+    async function restoreSession() {
         const session = getStoredSession()
 
         if (session) {
@@ -315,7 +315,11 @@ export const useUserStore = defineStore('user', () => {
             userType.value = savedType
 
             if (token.value) {
-                void refreshSession()
+                try {
+                    await refreshSession()
+                } catch {
+                    // Silently handle refresh errors - user is already restored from storage
+                }
             }
 
             return true
@@ -373,6 +377,13 @@ export const useUserStore = defineStore('user', () => {
         }
     }
 
+    /**
+     * Load user data from local storage
+     */
+    function loadUserFromStorage() {
+        return restoreSession()
+    }
+
     return {
         user,
         token,
@@ -392,6 +403,7 @@ export const useUserStore = defineStore('user', () => {
         refreshSession,
         logout,
         restoreSession,
+        loadUserFromStorage,
         updateUser,
         updateCompanyInfo
     }

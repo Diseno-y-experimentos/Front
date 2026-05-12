@@ -1,17 +1,50 @@
 <script setup>
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import useRouteStore from '@/searchroute/application/route.store.js'
 
 const { t } = useI18n()
 const emit = defineEmits(['search'])
+const routeStore = useRouteStore()
 
 const origin = ref('')
 const destination = ref('')
+const isSearching = ref(false)
+const searchError = ref('')
 
 
-const handleSearch = () => {
-  if (origin.value.trim() && destination.value.trim()) {
-    emit('search', { origin: origin.value, destination: destination.value })
+const handleSearch = async () => {
+  const nextOrigin = origin.value.trim()
+  const nextDestination = destination.value.trim()
+
+  if (!nextOrigin || !nextDestination) {
+    return
+  }
+
+  isSearching.value = true
+  searchError.value = ''
+
+  try {
+    const query = `${nextOrigin} ${nextDestination}`.trim()
+    const routes = await routeStore.fetchRoutes(query)
+
+    emit('search', {
+      origin: nextOrigin,
+      destination: nextDestination,
+      query,
+      routes
+    })
+  } catch (error) {
+    console.error('Error buscando rutas en el backend:', error)
+    searchError.value = t('searchRoute.error') || 'No se pudieron buscar rutas en el backend'
+    emit('search', {
+      origin: nextOrigin,
+      destination: nextDestination,
+      query: `${nextOrigin} ${nextDestination}`.trim(),
+      routes: []
+    })
+  } finally {
+    isSearching.value = false
   }
 }
 </script>
@@ -40,10 +73,12 @@ const handleSearch = () => {
 
     <button
         @click="handleSearch"
-        :disabled="!origin.trim() || !destination.trim()"
+        :disabled="!origin.trim() || !destination.trim() || isSearching"
     >
-      {{ t('searchRoute.search') }}
+      {{ isSearching ? (t('searchRoute.searching') || 'Buscando...') : t('searchRoute.search') }}
     </button>
+
+    <p v-if="searchError" class="search-error">{{ searchError }}</p>
   </div>
 </template>
 
@@ -118,5 +153,13 @@ button:active:not(:disabled) {
 button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.search-error {
+  margin: 0;
+  text-align: center;
+  color: #ffdddd;
+  font-size: 14px;
+  font-weight: 600;
 }
 </style>

@@ -21,6 +21,7 @@ const emit = defineEmits(['save-route'])
 const isSaving = ref(false)
 const saveMessage = ref('')
 const isSaveSuccess = computed(() => saveMessage.value.includes('guardada'))
+const matchingRoutes = computed(() => Array.isArray(props.routeData?.routes) ? props.routeData.routes : [])
 
 const getRouteId = () => {
   return props.routeData?.id ?? props.routeData?.Id ?? props.routeData?.routeId ?? null
@@ -132,6 +133,17 @@ const extractStepsFromRouteData = (routeData) => {
       </div>
     </div>
 
+    <div v-if="matchingRoutes.length" class="routes-summary">
+      <h3>{{ $t('routeResults.foundRoutes') || 'Rutas encontradas' }}</h3>
+      <div class="routes-grid">
+        <article v-for="route in matchingRoutes" :key="route.id" class="route-chip">
+          <strong>{{ route.name || route.id }}</strong>
+          <span v-if="route.estimatedTime">{{ route.estimatedTime }}</span>
+          <small v-if="route.frequency">{{ route.frequency }}</small>
+        </article>
+      </div>
+    </div>
+
     <div
         v-if="saveMessage"
         class="save-message"
@@ -188,6 +200,46 @@ const extractStepsFromRouteData = (routeData) => {
   border-radius: 12px;
   padding: 16px;
   margin-bottom: 20px;
+}
+
+.routes-summary {
+  background: #f7fbef;
+  border: 1px solid #dbeab7;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.routes-summary h3 {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  color: #5c7a3a;
+}
+
+.routes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+.route-chip {
+  background: white;
+  border: 1px solid #dbeab7;
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: #333;
+}
+
+.route-chip strong {
+  color: #2e7d32;
+}
+
+.route-chip span,
+.route-chip small {
+  color: #666;
 }
 
 .address-item {
@@ -253,34 +305,6 @@ const extractStepsFromRouteData = (routeData) => {
   margin: 8px 0;
 }
 
-.info-box {
-  display: flex;
-  gap: 12px;
-  background: #e8f5e9;
-  padding: 16px;
-  border-radius: 12px;
-  margin-bottom: 16px;
-  border-left: 4px solid #8bc34a;
-}
-
-.info-content {
-  flex: 1;
-}
-
-.info-content p {
-  margin: 0 0 8px 0;
-  font-size: 13px;
-  color: #2e7d32;
-  line-height: 1.5;
-}
-
-.info-content p:last-child {
-  margin-bottom: 0;
-}
-
-.info-content strong {
-  font-weight: 700;
-}
 
 .save-message {
   padding: 12px 16px;

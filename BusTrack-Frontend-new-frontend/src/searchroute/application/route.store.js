@@ -1,4 +1,3 @@
-import { Route } from '../domain/model/route.entity.js';
 
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
@@ -6,6 +5,25 @@ import { SearchRouteApi } from '../infrastructure/route-api.js';
 import { RouteAssembler } from '../infrastructure/route.assembler.js';
 
 const searchRouteApi = new SearchRouteApi();
+
+function matchesRouteSearch(route, searchText = '') {
+    const normalizedSearch = String(searchText).trim().toLowerCase();
+
+    if (!normalizedSearch) {
+        return true;
+    }
+
+    const haystack = [
+        route?.name ?? route?.Name ?? '',
+        route?.id ?? route?.Id ?? '',
+        route?.estimatedTime ?? route?.EstimatedTime ?? '',
+        route?.frequency ?? route?.Frequency ?? ''
+    ]
+        .map(value => String(value).toLowerCase())
+        .join(' ');
+
+    return haystack.includes(normalizedSearch);
+}
 
 const useRouteStore = defineStore('searchroute', () => {
     /**
@@ -35,20 +53,22 @@ const useRouteStore = defineStore('searchroute', () => {
 
     const routesCount = computed(() => (routesLoaded.value ? routes.value.length : 0));
 
-    function fetchRoutes(searchText = '') {
+    async function fetchRoutes(searchText = '') {
         isLoading.value = true;
+        errors.value = [];
 
-        searchRouteApi.getRoutes(searchText)
-            .then(response => {
-                routes.value = RouteAssembler.toEntitiesFromResponse(response.data);
-                routesLoaded.value = true;
-            })
-            .catch(error => {
-                errors.value.push(error);
-            })
-            .finally(() => {
-                isLoading.value = false;
-            });
+        try {
+            const response = await searchRouteApi.getRoutes();
+            const allRoutes = RouteAssembler.toEntitiesFromResponse(response.data);
+            routes.value = allRoutes.filter(route => matchesRouteSearch(route, searchText));
+            routesLoaded.value = true;
+            return routes.value;
+        } catch (error) {
+            errors.value.push(error);
+            return [];
+        } finally {
+            isLoading.value = false;
+        }
     }
 
     function getRouteByName(name) {

@@ -9,7 +9,7 @@ const { t } = useI18n()
 const tabs = [
   { to: { name: 'search-route' }, labelKey: 'nav.searchRoute' },
   { to: { name: 'notifications' }, labelKey: 'nav.notifications' },
-  { to: { name: 'bus-stops' }, labelKey: 'nav.busStops' },
+  // { to: { name: 'bus-stops' }, labelKey: 'nav.busStops' }, // Oculto temporalmente
   { to: { name: 'profile' }, labelKey: 'nav.profile' },
 ]
 </script>

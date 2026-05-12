@@ -1,11 +1,13 @@
 <script setup lang="js">
 import CompanyTopNav from '@/shared/presentation/components/CompanyTopNav.vue'
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useAlertsStore } from '@/stores/useAlertsStore'
+import { useBusesStore } from '@/stores/useBusesStore'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 const alertsStore = useAlertsStore()
+const busesStore = useBusesStore()
 
 // --- ESTADO DE FILTROS ---
 const filters = ref({
@@ -20,7 +22,29 @@ const newAlert = ref({
   type: 'traffic',
   severity: 'medium',
   busId: '',
-  route: ''
+  route: '',
+  busIdLabel: ''
+})
+
+const availableBuses = computed(() => busesStore.buses)
+
+const selectedBus = computed(() => {
+  if (!newAlert.value.busId) return null
+  return busesStore.buses.find(bus => String(bus.id) === String(newAlert.value.busId)) ?? null
+})
+
+const syncBusData = (bus = selectedBus.value) => {
+  newAlert.value.route = bus?.route ?? ''
+  newAlert.value.busIdLabel = bus ? `${bus.id} • ${bus.plate}` : ''
+}
+
+watch(selectedBus, (bus) => syncBusData(bus), { immediate: true })
+
+onMounted(async () => {
+  await Promise.all([
+    alertsStore.fetchAlerts(),
+    busesStore.fetchBuses()
+  ])
 })
 
 const filteredAlerts = computed(() => {
@@ -47,28 +71,32 @@ const handleResolve = (id) => {
 // 2. Abrir Modal
 const openCreateModal = () => {
   // Resetear formulario
-  newAlert.value = { type: 'traffic', severity: 'medium', busId: '', route: '' }
+  newAlert.value = { type: 'traffic', severity: 'medium', busId: '', route: '', busIdLabel: '' }
   showCreateModal.value = true
 }
 
 // 3. Crear Alerta
-const createAlert = () => {
-  if (!newAlert.value.busId || !newAlert.value.route) {
+const createAlert = async () => {
+  const bus = selectedBus.value
+
+  if (!bus) {
     alert(t('alerts.errors.missingFields'))
     return
   }
 
   const autoTitle = t(`alerts.types.${newAlert.value.type}`)
 
-  alertsStore.addAlert({
+  const created = await alertsStore.addAlert({
     title: autoTitle,
     type: newAlert.value.type,
     severity: newAlert.value.severity,
-    busId: newAlert.value.busId,
-    route: newAlert.value.route
+    busId: bus.id,
+    route: bus.route
   })
 
-  showCreateModal.value = false
+  if (created) {
+    showCreateModal.value = false
+  }
 }
 
 // --- UTILIDADES DE ESTILO ---
@@ -203,20 +231,16 @@ const getSeverityClass = (severity) => {
 
               <div class="form-group">
                 <label>{{ t('alerts.create.busId') }}</label>
-                <input
-                    v-model="newAlert.busId"
-                    type="text"
-                    :placeholder="t('alerts.create.busIdPlaceholder')"
-                >
-              </div>
-
-              <div class="form-group">
-                <label>{{ t('alerts.create.route') }}</label>
-                <input
-                    v-model="newAlert.route"
-                    type="text"
-                    :placeholder="t('alerts.create.routePlaceholder')"
-                >
+                <select v-model="newAlert.busId" @change="syncBusData">
+                  <option value="">{{ t('alerts.create.selectBus') || 'Selecciona un bus' }}</option>
+                  <option
+                      v-for="bus in availableBuses"
+                      :key="bus.id"
+                      :value="String(bus.id)"
+                  >
+                    {{ bus.id }} — {{ bus.plate }}
+                  </option>
+                </select>
               </div>
             </div>
 

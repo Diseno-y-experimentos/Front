@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/useUserStore'
 import { useI18n } from 'vue-i18n'
@@ -39,6 +39,13 @@ onMounted(() => {
     name: userStore.user.username || '',
     email: userStore.user.email || '',
     password: userStore.user.password || ''
+  }
+})
+
+// Observe cambios en isLoggedIn
+watch(() => userStore.isLoggedIn, (newValue) => {
+  if (!newValue) {
+    router.push('/login')
   }
 })
 
@@ -82,7 +89,7 @@ const showSuccess = (message) => {
   }, 3000)
 }
 
-const saveChanges = () => {
+const saveChanges = async () => {
 
   if (!userData.value.name || !userData.value.email || !userData.value.password) {
     showError(t('accountSettings.errorAllFields'))
@@ -102,14 +109,18 @@ const saveChanges = () => {
     return
   }
 
+  try {
+    await userStore.updateUser({
+      username: userData.value.name,
+      email: userData.value.email,
+      password: userData.value.password
+    })
 
-  userStore.updateUser({
-    username: userData.value.name,
-    email: userData.value.email,
-    password: userData.value.password
-  })
-
-  showSuccess(t('accountSettings.saveSuccess'))
+    showSuccess(t('accountSettings.saveSuccess'))
+  } catch (error) {
+    console.error('Error al guardar cambios:', error)
+    showError(t('accountSettings.errorSaving') || 'Error al guardar los cambios')
+  }
 }
 </script>
 

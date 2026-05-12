@@ -58,7 +58,11 @@ export const useAlertsStore = defineStore('alerts', {
             const body = {
                 Title: payload.title ?? payload.Title ?? 'Alerta del Sistema',
                 Message: payload.message ?? payload.Message ?? payload.details ?? '',
-                IsRead: payload.isRead ?? payload.IsRead ?? false
+                IsRead: payload.isRead ?? payload.IsRead ?? false,
+                BusId: payload.busId ?? payload.BusId ?? null,
+                Route: payload.route ?? payload.Route ?? null,
+                Severity: payload.severity ?? payload.Severity ?? 'medium',
+                Type: payload.type ?? payload.Type ?? 'info'
             }
 
             try {

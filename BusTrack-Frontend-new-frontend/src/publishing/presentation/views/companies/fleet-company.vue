@@ -1,40 +1,42 @@
 <script setup lang="js">
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useBusesStore } from '@/stores/useBusesStore.js'
 import CompanyTopNav from '@/shared/presentation/components/CompanyTopNav.vue'
 
 const { t } = useI18n()
+const busesStore = useBusesStore()
 
 // Estado reactivo
 const stats = computed(() => ({
-  total: buses.value.length,
-  active: buses.value.filter(b => b.status === 'active').length,
-  maintenance: buses.value.filter(b => b.status === 'maintenance').length,
-  inactive: buses.value.filter(b => b.status === 'inactive').length
+  total: busesStore.busesCount,
+  active: busesStore.activeBuses,
+  maintenance: busesStore.maintenanceBuses,
+  inactive: busesStore.inactiveBuses
 }))
 
-const buses = ref([])
-const STORAGE_KEY = 'company_fleet_buses_v1'
+const isLoading = ref(false)
+const saveMessage = ref('')
+const showSaveMessage = ref(false)
 
-onMounted(() => {
+onMounted(async () => {
+  isLoading.value = true
   try {
-    const saved = localStorage.getItem(STORAGE_KEY)
-    if (saved) {
-      buses.value = JSON.parse(saved)
-    }
-  } catch (e) {
-    // ignore
+    await busesStore.fetchBuses()
+  } catch (err) {
+    console.error('Error cargando buses:', err)
+  } finally {
+    isLoading.value = false
   }
 })
 
-// Persistir cambios localmente
-watch(buses, (val) => {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(val))
-  } catch (e) {
-    // ignore
-  }
-}, { deep: true })
+const showSuccessMessage = (message) => {
+  saveMessage.value = message
+  showSaveMessage.value = true
+  setTimeout(() => {
+    showSaveMessage.value = false
+  }, 3000)
+}
 
 // Estado para modales
 const showAddModal = ref(false)
@@ -54,13 +56,6 @@ const busForm = ref({
 // Métodos
 const getStatusText = (status) => {
   return t(`fleet.status.${status}`)
-}
-
-const getNextBusId = () => {
-  if (buses.value.length === 0) {
-    return 1
-  }
-  return Math.max(...buses.value.map(b => b.id)) + 1
 }
 
 const handleAddBus = () => {
@@ -85,39 +80,80 @@ const handleDetails = (bus) => {
   showDetailsModal.value = true
 }
 
-const saveNewBus = () => {
-  // Generar un ID nuevo
-  const newId = getNextBusId()
-  const newBus = {
-    ...busForm.value,
-    id: newId
+const saveNewBus = async () => {
+  const plate = busForm.value.plate.trim()
+  const route = busForm.value.route.trim()
+  const driver = busForm.value.driver.trim()
+
+  if (!plate || !route || !driver) {
+    alert(t('fleet.errors.missingFields') || 'La placa, ruta y conductor son obligatorios')
+    return
   }
-  buses.value.push(newBus)
-  showAddModal.value = false
-  alert(t('fleet.messages.busAdded'))
+
+  try {
+    isLoading.value = true
+    await busesStore.addBus({
+      plate,
+      route,
+      status: busForm.value.status,
+      driver
+    })
+    showAddModal.value = false
+    showSuccessMessage(t('fleet.messages.busAdded'))
+  } catch (err) {
+    alert(t('fleet.errors.saveFailed') || 'Error al guardar el bus: ' + err.message)
+  } finally {
+    isLoading.value = false
+  }
 }
 
-const saveEditBus = () => {
-  const index = buses.value.findIndex(b => b.id === selectedBus.value.id)
-  if (index !== -1) {
-    buses.value[index] = { ...busForm.value }
+const saveEditBus = async () => {
+  const plate = busForm.value.plate.trim()
+  const route = busForm.value.route.trim()
+  const driver = busForm.value.driver.trim()
+
+  if (!plate || !route || !driver) {
+    alert(t('fleet.errors.missingFields') || 'La placa, ruta y conductor son obligatorios')
+    return
   }
-  showEditModal.value = false
-  alert(t('fleet.messages.busUpdated'))
+
+  try {
+    isLoading.value = true
+    await busesStore.updateBus(selectedBus.value.id, {
+      plate,
+      route,
+      status: busForm.value.status,
+      driver
+    })
+    showEditModal.value = false
+    showSuccessMessage(t('fleet.messages.busUpdated'))
+  } catch (err) {
+    alert(t('fleet.errors.updateFailed') || 'Error al actualizar el bus: ' + err.message)
+  } finally {
+    isLoading.value = false
+  }
 }
 
-const handleDelete = (bus) => {
+const handleDelete = async (bus) => {
   const confirmed = window.confirm(t('fleet.messages.confirmDelete'))
   if (!confirmed) {
     return
   }
-  buses.value = buses.value.filter(b => b.id !== bus.id)
-  if (selectedBus.value?.id === bus.id) {
-    selectedBus.value = null
+
+  try {
+    isLoading.value = true
+    await busesStore.deleteBus(bus.id)
+    if (selectedBus.value?.id === bus.id) {
+      selectedBus.value = null
+    }
+    showEditModal.value = false
+    showDetailsModal.value = false
+    showSuccessMessage(t('fleet.messages.busDeleted'))
+  } catch (err) {
+    alert(t('fleet.errors.deleteFailed') || 'Error al eliminar el bus: ' + err.message)
+  } finally {
+    isLoading.value = false
   }
-  showEditModal.value = false
-  showDetailsModal.value = false
-  alert(t('fleet.messages.busDeleted'))
 }
 
 const closeModal = () => {
@@ -163,7 +199,15 @@ const closeModal = () => {
 
       <!-- Tabla de flota -->
       <div class="table-container">
-        <table class="fleet-table">
+        <div v-if="isLoading" class="loading-state">
+          <span>{{ t('fleet.loading') || 'Cargando buses...' }}</span>
+        </div>
+
+        <div v-else-if="busesStore.buses.length === 0" class="empty-state">
+          <p>{{ t('fleet.empty') || 'No hay buses registrados' }}</p>
+        </div>
+
+        <table v-else class="fleet-table">
           <thead>
           <tr>
             <th>{{ t('fleet.table.id') }}</th>
@@ -175,7 +219,7 @@ const closeModal = () => {
           </tr>
           </thead>
           <tbody>
-          <tr v-for="bus in buses" :key="bus.id">
+          <tr v-for="bus in busesStore.buses" :key="bus.id">
             <td class="bus-id">{{ bus.id }}</td>
             <td>{{ bus.plate }}</td>
             <td>{{ bus.route }}</td>
@@ -190,13 +234,13 @@ const closeModal = () => {
             <td>{{ bus.driver || '-' }}</td>
             <td>
               <div class="action-buttons">
-                <button class="btn-action btn-edit" @click="handleEdit(bus)">
+                <button class="btn-action btn-edit" @click="handleEdit(bus)" :disabled="isLoading">
                   {{ t('fleet.actions.edit') }}
                 </button>
-                <button class="btn-action btn-details" @click="handleDetails(bus)">
+                <button class="btn-action btn-details" @click="handleDetails(bus)" :disabled="isLoading">
                   {{ t('fleet.actions.details') }}
                 </button>
-                <button class="btn-action btn-delete" @click="handleDelete(bus)">
+                <button class="btn-action btn-delete" @click="handleDelete(bus)" :disabled="isLoading">
                   {{ t('fleet.actions.delete') }}
                 </button>
               </div>
@@ -206,6 +250,11 @@ const closeModal = () => {
         </table>
       </div>
     </main>
+
+    <!-- Mensaje de éxito -->
+    <div v-if="showSaveMessage" class="success-message">
+      {{ saveMessage }}
+    </div>
 
     <!-- Agregar Bus -->
     <div v-if="showAddModal" class="modal-overlay" @click.self="closeModal">
@@ -445,6 +494,23 @@ const closeModal = () => {
   color: #666;
 }
 
+.loading-state {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  color: #666;
+  font-size: 1rem;
+}
+
+.empty-state {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  color: #999;
+  font-size: 1rem;
+}
 
 .table-container {
   background: white;
@@ -529,12 +595,17 @@ const closeModal = () => {
   font-size: 0.85rem;
 }
 
+.btn-action:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .btn-edit {
   background: #A4C639;
   color: white;
 }
 
-.btn-edit:hover {
+.btn-edit:hover:not(:disabled) {
   background: #8fb030;
 }
 
@@ -543,7 +614,7 @@ const closeModal = () => {
   color: #666;
 }
 
-.btn-details:hover {
+.btn-details:hover:not(:disabled) {
   background: #e0e0e0;
 }
 
@@ -552,7 +623,7 @@ const closeModal = () => {
   color: white;
 }
 
-.btn-delete:hover {
+.btn-delete:hover:not(:disabled) {
   background: #c94545;
 }
 
@@ -701,6 +772,11 @@ const closeModal = () => {
   box-shadow: 0 4px 12px rgba(164, 198, 57, 0.3);
 }
 
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .btn-secondary {
   padding: 0.8rem 1.5rem;
   background: #f0f0f0;
@@ -715,6 +791,30 @@ const closeModal = () => {
 .btn-secondary:hover {
   background: #e0e0e0;
   color: #2c3e50;
+}
+
+.success-message {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #4caf50;
+  color: white;
+  padding: 16px 24px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 1001;
+  animation: slideInUp 0.3s ease;
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 @media (max-width: 968px) {

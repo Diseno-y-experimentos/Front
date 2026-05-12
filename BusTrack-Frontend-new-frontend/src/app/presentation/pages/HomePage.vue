@@ -39,8 +39,7 @@ const trackLocation = () => {
         async (position) => {
           const { latitude, longitude } = position.coords
           coords.value = [latitude, longitude]
-          const locationAddress = await getAddressFromCoords(latitude, longitude)
-          address.value = locationAddress
+          address.value = await getAddressFromCoords(latitude, longitude)
         },
         (error) => {
           console.log('Geolocation error:', error)
@@ -62,7 +61,10 @@ const handleSearch = (data) => {
 }
 
 const handleRouteReady = (data) => {
-  routeInfo.value = data
+  routeInfo.value = {
+    ...routeData.value,
+    ...data
+  }
 }
 
 const resetToCurrentLocation = () => {

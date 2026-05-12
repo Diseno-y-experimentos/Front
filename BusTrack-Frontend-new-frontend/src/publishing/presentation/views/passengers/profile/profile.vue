@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/useUserStore'
 
@@ -9,16 +9,34 @@ const userStore = useUserStore()
 // Estado para controlar visibilidad
 const showEmail = ref(false)
 const showPassword = ref(false)
+const isLoadingProfile = ref(true)
 
 // Cargar datos del usuario al montar el componente
-onMounted(() => {
-  userStore.loadUserFromStorage()
+onMounted(async () => {
+  try {
+    // Restaurar sesión si existe
+    await userStore.loadUserFromStorage()
 
-  // Si no hay usuario autenticado, redirigir a login
-  if (!userStore.isLoggedIn) {
-    router.push('/login')
+    // Verificar que haya usuario autenticado
+    if (!userStore.isLoggedIn || !userStore.user.id) {
+      console.warn('No se encontró usuario autenticado')
+      await router.push('/login')
+      return
+    }
+  } catch (err) {
+    console.error('Error cargando perfil:', err)
+    await router.push('/login')
+  } finally {
+    isLoadingProfile.value = false
   }
 })
+
+// Vigilar cambios en el estado de autenticación SOLO después de cargar
+watch(() => userStore.isLoggedIn, (newValue) => {
+  if (!newValue && !isLoadingProfile.value) {
+    router.push('/login')
+  }
+}, { immediate: false })
 
 const handleLogout = () => {
   console.log('Cerrando sesión...')
@@ -37,7 +55,16 @@ const togglePasswordVisibility = () => {
 </script>
 
 <template>
-  <div class="profile-container">
+  <div v-if="isLoadingProfile" class="loading-container">
+    <div class="spinner"></div>
+    <p>{{ $t('profile.loading') || 'Cargando perfil...' }}</p>
+  </div>
+
+  <div v-else-if="!userStore.isLoggedIn || !userStore.user.id" class="error-container">
+    <p>{{ $t('profile.notAuthenticated') || 'No autenticado' }}</p>
+  </div>
+
+  <div v-else class="profile-container">
     <!-- Información del usuario -->
     <div class="user-info-section">
       <div class="avatar-container">
@@ -132,6 +159,40 @@ const togglePasswordVisibility = () => {
 </template>
 
 <style scoped>
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 140px);
+  gap: 20px;
+  background-color: #f5f5f5;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #e0e0e0;
+  border-top: 5px solid #789c0a;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 140px);
+  background-color: #f5f5f5;
+  color: #d32f2f;
+  font-size: 1.2em;
+}
+
 .profile-container {
   display: flex;
   min-height: calc(100vh - 140px);
