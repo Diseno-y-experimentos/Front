@@ -3,6 +3,7 @@ import { reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/useUserStore'
 import { useI18n } from 'vue-i18n'
+import LanguageSwitcher from "@/shared/presentation/components/language-switcher.vue";
 
 const router = useRouter()
 const { t } = useI18n()
@@ -94,7 +95,7 @@ async function onSubmit(){
   emit('submit', { ...form })
 
 
-  router.push('/login')
+  await router.push('/login')
 }
 
 function onGoogleSignup() {
