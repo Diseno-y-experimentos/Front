@@ -1,0 +1,48 @@
+name: BusTrack Continuous Delivery
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - feature/deploy
+
+  pull_request:
+    branches:
+      - main
+      - develop
+      - feature/deploy
+
+jobs:
+  build-bustrack:
+    name: Build BusTrack Project
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout BusTrack repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: BusTrack-Frontend-new-frontend/package-lock.json
+
+      - name: Install project dependencies
+        working-directory: BusTrack-Frontend-new-frontend
+        run: npm ci
+
+      - name: Build BusTrack platform
+        working-directory: BusTrack-Frontend-new-frontend
+        run: npm run build
+        env:
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+          VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.VITE_GOOGLE_MAPS_API_KEY }}
+          VITE_OVERPASS_API_URL: ${{ secrets.VITE_OVERPASS_API_URL }}
+
+      - name: Upload BusTrack build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: bustrack-build
+          path: BusTrack-Frontend-new-frontend/dist
