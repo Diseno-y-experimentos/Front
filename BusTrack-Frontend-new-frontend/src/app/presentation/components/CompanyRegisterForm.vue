@@ -12,6 +12,7 @@ const form = ref({
   companyName: '',
   ruc: '',
   email: '',
+  phone: '',
   address: '',
   password: '',
   confirmPassword: '',
@@ -40,6 +41,10 @@ const validateForm = () => {
 
   if (!form.value.address.trim()) {
     errors.value.address = t('companyRegister.register.errors.addressRequired') || 'La dirección es requerida'
+  }
+
+  if (!form.value.phone.trim()) {
+    errors.value.phone = t('companyRegister.register.errors.phoneRequired') || 'El teléfono es requerido'
   }
 
   if (!form.value.password) {
@@ -73,6 +78,7 @@ const handleSubmit = async () => {
       companyName: form.value.companyName,
       ruc: form.value.ruc,
       email: form.value.email,
+      phone: form.value.phone,
       address: form.value.address,
       password: form.value.password,
       fleetSize: form.value.fleetSize
@@ -139,6 +145,21 @@ const goToLogin = () => {
       />
       <span v-if="errors.email" class="error-message">
         {{ errors.email }}
+      </span>
+    </div>
+
+    <!-- Teléfono -->
+    <div class="form-group">
+      <label class="form-label">{{ t('companyRegister.register.phone') || 'Teléfono' }}</label>
+      <input
+          type="text"
+          v-model="form.phone"
+          class="form-input"
+          :class="{ 'input-error': errors.phone }"
+          :placeholder="t('companyRegister.register.phonePlaceholder') || '+51 987 654 321'"
+      />
+      <span v-if="errors.phone" class="error-message">
+        {{ errors.phone }}
       </span>
     </div>
 

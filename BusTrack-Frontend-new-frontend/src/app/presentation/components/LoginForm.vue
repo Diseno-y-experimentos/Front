@@ -66,13 +66,13 @@ async function onSubmit () {
       console.log('✅ Login empresa exitoso, redirigiendo...')
       emit('submit', company)
       // Limpiar alertas al iniciar sesión para empezar con tablero vacío
-      alertsStore.clearAll()
+        await alertsStore.clearAll()
       // Redirigir a Flota tras login de empresa (antes: monitoring)
       router.push({ name: 'company-fleet' })
     }
     // CASO PASAJERO
     else {
-      const success = userStore.login({
+      const success = await userStore.login({
         email: form.emailOrUsername,
         username: form.emailOrUsername,
         password: form.password

@@ -13,7 +13,7 @@ const toastIcon = ref('')
 const notifications = computed(() => notificationsStore.getAllNotifications)
 
 onMounted(() => {
-  notificationsStore.items = JSON.parse(localStorage.getItem('notifications') || '[]')
+  notificationsStore.fetchNotifications()
 })
 
 watch(
@@ -54,13 +54,13 @@ const translateMessage = (notification) => {
   return notification.message || t('notifications.messages.default')
 }
 
-const removeNotification = (id) => {
-  notificationsStore.removeNotification(id)
+const removeNotification = async (id) => {
+  await notificationsStore.removeNotification(id)
 }
 
-const clearAllNotifications = () => {
+const clearAllNotifications = async () => {
   if (confirm(t('notifications.confirmClearAll'))) {
-    notificationsStore.clearAll()
+    await notificationsStore.clearAll()
   }
 }
 
@@ -69,7 +69,7 @@ const getPriorityClass = (priority) => {
 }
 
 // Testing US05 and US06
-const testUS05 = (delayMinutes, enabled = true) => {
+const testUS05 = async (delayMinutes, enabled = true) => {
   console.log('\n🧪 ===== TESTING US05 =====')
 
   localStorage.setItem('notificationsEnabled', enabled.toString())
@@ -81,7 +81,7 @@ const testUS05 = (delayMinutes, enabled = true) => {
     stopName: 'Rafael Escardó'
   }
 
-  const notified = notificationsStore.notifyDelay(testData)
+  const notified = await notificationsStore.notifyDelay(testData)
 
   if (notified) {
     console.log('✅ US05 Positivo: Notificación enviada')
@@ -94,7 +94,7 @@ const testUS05 = (delayMinutes, enabled = true) => {
   return notified
 }
 
-const testUS06 = (hasConnection = true) => {
+const testUS06 = async (hasConnection = true) => {
   console.log('\n🧪 ===== TESTING US06 =====')
 
   const testData = {
@@ -105,7 +105,7 @@ const testUS06 = (hasConnection = true) => {
   }
 
   const notified = hasConnection
-      ? notificationsStore.notifyRouteDetourWithConnection(testData)
+      ? await notificationsStore.notifyRouteDetourWithConnection(testData)
       : false
 
   if (notified) {

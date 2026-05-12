@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useSavedRoutesStore } from '@/stores/useSavedRoutesStore'
 import { useNotificationsStore } from '@/stores/useNotificationsStore'
@@ -11,6 +11,10 @@ const savedRoutesStore = useSavedRoutesStore()
 const notificationsStore = useNotificationsStore()
 
 const routes = computed(() => savedRoutesStore.getAllRoutes)
+
+onMounted(() => {
+  savedRoutesStore.fetchSavedRoutes()
+})
 
 const goBack = () => {
   router.back()
@@ -27,11 +31,11 @@ const viewRouteDetails = (route) => {
   })
 }
 
-const removeRoute = (routeId) => {
+const removeRoute = async (routeId) => {
   if (confirm(t('favoriteRoutes.confirmDelete'))) {
-    savedRoutesStore.removeRoute(routeId)
+    await savedRoutesStore.removeRoute(routeId)
 
-    notificationsStore.addNotification({
+    await notificationsStore.addNotification({
       type: 'info',
       messageKey: 'favoriteRoutes.removed', // mejor usar messageKey
       priority: 'low',

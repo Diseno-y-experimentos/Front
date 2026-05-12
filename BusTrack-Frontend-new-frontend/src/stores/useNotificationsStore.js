@@ -1,4 +1,22 @@
 import { defineStore } from 'pinia'
+import { BaseApi } from '@/shared/infrastructure/base-api.js'
+
+const api = new BaseApi()
+
+function normalizeNotification(resource = {}) {
+    return {
+        id: resource.Id ?? resource.id ?? Date.now(),
+        type: resource.Type ?? resource.type ?? 'info',
+        messageKey: resource.MessageKey ?? resource.messageKey ?? null,
+        messageParams: resource.MessageParams ?? resource.messageParams ?? {},
+        timestamp: resource.CreatedAt ?? resource.createdAt ?? resource.timestamp ?? new Date().toISOString(),
+        priority: resource.Priority ?? resource.priority ?? 'medium',
+        icon: resource.Icon ?? resource.icon ?? '📍',
+        read: resource.IsRead ?? resource.isRead ?? false,
+        title: resource.Title ?? resource.title ?? null,
+        message: resource.Message ?? resource.message ?? resource.messageKey ?? 'notifications.messages.default'
+    }
+}
 
 /**
  * Notifications Store
@@ -26,32 +44,56 @@ export const useNotificationsStore = defineStore('notifications', {
     },
 
     actions: {
+        async fetchNotifications() {
+            try {
+                const response = await api.http.get('/notifications')
+                const resources = Array.isArray(response.data) ? response.data : []
+                this.items = resources.map(normalizeNotification)
+                this.saveToLocalStorage()
+                return this.items
+            } catch (error) {
+                console.warn('No se pudieron sincronizar las notificaciones:', error?.response?.data || error.message)
+                return this.items
+            }
+        },
+
         /**
          * Add a new notification
          * @param {Object} payload - Notification data
          */
-        addNotification(payload) {
-            const notification = {
-                id: Date.now(),
-                type: payload.type || 'info',
-                messageKey: payload.messageKey || payload.message || 'notifications.messages.default',
-                messageParams: payload.messageParams || {},
-                timestamp: new Date().toISOString(),
-                priority: payload.priority || 'medium',
-                icon: payload.icon || '📍',
-                read: false,
-                ...payload,
+        async addNotification(payload) {
+            const body = {
+                Title: payload.title ?? payload.Title ?? payload.messageKey ?? 'Notificación',
+                Message: payload.message ?? payload.Message ?? payload.messageKey ?? 'notifications.messages.default',
+                IsRead: payload.read ?? payload.IsRead ?? false
             }
-            this.items.unshift(notification)
-            this.saveToLocalStorage()
+
+            try {
+                const response = await api.http.post('/notifications', body)
+                const notification = normalizeNotification(response.data)
+                this.items.unshift(notification)
+                this.saveToLocalStorage()
+                return notification
+            } catch (error) {
+                const notification = normalizeNotification({
+                    ...payload,
+                    id: Date.now(),
+                    read: false,
+                    timestamp: new Date().toISOString()
+                })
+                console.warn('No se pudo guardar la notificación en el backend, usando fallback local:', error?.response?.data || error.message)
+                this.items.unshift(notification)
+                this.saveToLocalStorage()
+                return notification
+            }
         },
 
         /**
          * Notify that a route was saved
          * @param {string} routeName - Name of the saved route
          */
-        notifyRouteSaved(routeName) {
-            this.addNotification({
+        async notifyRouteSaved(routeName) {
+            return this.addNotification({
                 messageKey: 'notifications.messages.routeSaved',
                 messageParams: { routeName },
                 icon: '⭐',
@@ -63,8 +105,8 @@ export const useNotificationsStore = defineStore('notifications', {
          * Notify that a route was removed
          * @param {string} routeName - Name of the removed route
          */
-        notifyRouteRemoved(routeName) {
-            this.addNotification({
+        async notifyRouteRemoved(routeName) {
+            return this.addNotification({
                 messageKey: 'notifications.messages.routeRemoved',
                 messageParams: { routeName },
                 icon: '🗑️',
@@ -77,8 +119,8 @@ export const useNotificationsStore = defineStore('notifications', {
          * @param {string} busNumber - Bus identifier
          * @param {number} minutes - Minutes until arrival
          */
-        notifyBusArriving(busNumber, minutes) {
-            this.addNotification({
+        async notifyBusArriving(busNumber, minutes) {
+            return this.addNotification({
                 messageKey: 'notifications.messages.busArriving',
                 messageParams: { busNumber, minutes },
                 icon: '🚌',
@@ -89,8 +131,8 @@ export const useNotificationsStore = defineStore('notifications', {
         /**
          * Notify that a favorite was added
          */
-        notifyFavoriteAdded() {
-            this.addNotification({
+        async notifyFavoriteAdded() {
+            return this.addNotification({
                 messageKey: 'notifications.messages.favoriteAdded',
                 icon: '⭐',
                 priority: 'medium'
@@ -100,8 +142,8 @@ export const useNotificationsStore = defineStore('notifications', {
         /**
          * Notify that a favorite was removed
          */
-        notifyFavoriteRemoved() {
-            this.addNotification({
+        async notifyFavoriteRemoved() {
+            return this.addNotification({
                 messageKey: 'notifications.messages.favoriteRemoved',
                 icon: '🗑️',
                 priority: 'low'
@@ -117,7 +159,7 @@ export const useNotificationsStore = defineStore('notifications', {
          * @param {string} delayData.stopName - Stop name
          * @returns {boolean} Whether notification was sent
          */
-        notifyDelay(delayData) {
+        async notifyDelay(delayData) {
             const { busNumber, routeName, delayMinutes, stopName } = delayData
 
             if (delayMinutes <= 10) {
@@ -125,7 +167,7 @@ export const useNotificationsStore = defineStore('notifications', {
                 return false
             }
 
-            this.addNotification({
+            return this.addNotification({
                 messageKey: 'notifications.messages.busDelayed',
                 messageParams: {
                     busNumber,
@@ -139,7 +181,6 @@ export const useNotificationsStore = defineStore('notifications', {
             })
 
             console.log(`✅ US05 Positivo: Notificación enviada (${delayMinutes} min > 10 min)`)
-            return true
         },
 
         /**
@@ -151,10 +192,10 @@ export const useNotificationsStore = defineStore('notifications', {
          * @param {string} detourData.reason - Reason for detour
          * @returns {boolean} Whether notification was sent
          */
-        notifyRouteDetour(detourData) {
+        async notifyRouteDetour(detourData) {
             const { busNumber, originalRoute, newRoute, reason } = detourData
 
-            this.addNotification({
+            return this.addNotification({
                 messageKey: 'notifications.messages.routeDetour',
                 messageParams: {
                     busNumber,
@@ -168,7 +209,6 @@ export const useNotificationsStore = defineStore('notifications', {
             })
 
             console.log(`✅ US06 Positivo: Alerta de desvío enviada para bus ${busNumber}`)
-            return true
         },
 
         /**
@@ -176,7 +216,7 @@ export const useNotificationsStore = defineStore('notifications', {
          * @param {Object} detourData - Detour information
          * @returns {boolean} Whether notification was sent
          */
-        notifyRouteDetourWithConnection(detourData) {
+        async notifyRouteDetourWithConnection(detourData) {
             const isOnline = navigator.onLine
 
             if (!isOnline) {
@@ -191,12 +231,12 @@ export const useNotificationsStore = defineStore('notifications', {
          * Configure notification for a specific stop
          * @param {Object} stopData - Stop information
          */
-        configureStopNotification(stopData) {
+        async configureStopNotification(stopData) {
             const savedStops = JSON.parse(localStorage.getItem('notificationStops') || '[]')
 
             const exists = savedStops.some(s => s.id === stopData.id)
             if (exists) {
-                this.addNotification({
+                return this.addNotification({
                     messageKey: 'notifications.messages.alreadyConfigured',
                     messageParams: { stopName: stopData.name },
                     icon: 'ℹ️',
@@ -212,7 +252,7 @@ export const useNotificationsStore = defineStore('notifications', {
             })
             localStorage.setItem('notificationStops', JSON.stringify(savedStops))
 
-            this.addNotification({
+            return this.addNotification({
                 messageKey: 'notifications.messages.notificationConfigured',
                 messageParams: { stopName: stopData.name },
                 icon: '🔔',
@@ -233,11 +273,23 @@ export const useNotificationsStore = defineStore('notifications', {
          * Mark a notification as read
          * @param {number} notificationId - Notification ID
          */
-        markAsRead(notificationId) {
+        async markAsRead(notificationId) {
             const notification = this.items.find(item => item.id === notificationId)
             if (notification) {
-                notification.read = true
-                this.saveToLocalStorage()
+                try {
+                    const response = await api.http.put(`/notifications/${notificationId}`, {
+                        Title: notification.title ?? notification.messageKey ?? 'Notificación',
+                        Message: notification.message ?? notification.messageKey ?? 'notifications.messages.default',
+                        IsRead: true
+                    })
+                    const updated = normalizeNotification(response.data)
+                    const index = this.items.findIndex(item => item.id === notificationId)
+                    if (index !== -1) this.items[index] = updated
+                } catch (error) {
+                    notification.read = true
+                    this.saveToLocalStorage()
+                    console.warn('No se pudo marcar la notificación como leída en el backend:', error?.response?.data || error.message)
+                }
             }
         },
 
@@ -245,15 +297,23 @@ export const useNotificationsStore = defineStore('notifications', {
          * Remove a notification
          * @param {number} notificationId - Notification ID
          */
-        removeNotification(notificationId) {
-            this.items = this.items.filter(item => item.id !== notificationId)
-            this.saveToLocalStorage()
+        async removeNotification(notificationId) {
+            try {
+                await api.http.delete(`/notifications/${notificationId}`)
+            } catch (error) {
+                console.warn('No se pudo eliminar la notificación en el backend, eliminando localmente:', error?.response?.data || error.message)
+            } finally {
+                this.items = this.items.filter(item => item.id !== notificationId)
+                this.saveToLocalStorage()
+            }
         },
 
         /**
          * Clear all notifications
          */
-        clearAll() {
+        async clearAll() {
+            const items = [...this.items]
+            await Promise.all(items.map(item => this.removeNotification(item.id)))
             this.items = []
             this.saveToLocalStorage()
         },

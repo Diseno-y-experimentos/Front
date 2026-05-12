@@ -85,17 +85,18 @@ const canSubmit = computed(() => {
 async function onSubmit(){
   if (!validate()) return
 
+  try {
+    await userStore.register({
+      Username: form.username,
+      Email: form.email,
+      Password: form.password
+    })
 
-  userStore.register({
-    username: form.username,
-    email: form.email,
-    password: form.password
-  })
-
-  emit('submit', { ...form })
-
-
-  await router.push('/login')
+    emit('submit', { ...form })
+    await router.push('/login')
+  } catch (error) {
+    console.error('❌ Error al registrar usuario:', error)
+  }
 }
 
 function onGoogleSignup() {

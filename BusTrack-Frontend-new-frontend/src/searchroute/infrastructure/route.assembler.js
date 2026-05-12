@@ -7,7 +7,12 @@ export class RouteAssembler {
      * @returns {Route}
      */
     static toEntityFromResource(resource) {
-        return new Route(resource.id, resource.name, resource.estimatedTime, resource.frequency);
+        return new Route({
+            id: resource?.id ?? resource?.Id ?? '',
+            name: resource?.name ?? resource?.Name ?? '',
+            estimatedTime: resource?.estimatedTime ?? resource?.EstimatedTime ?? null,
+            frequency: resource?.frequency ?? resource?.Frequency ?? null
+        });
     }
 
     /**

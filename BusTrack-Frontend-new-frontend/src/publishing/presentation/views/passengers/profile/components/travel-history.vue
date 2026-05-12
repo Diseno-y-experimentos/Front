@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useTravelHistoryStore } from '@/stores/useTravelHistoryStore'
 
@@ -7,6 +7,10 @@ const router = useRouter()
 const travelHistoryStore = useTravelHistoryStore()
 
 const trips = computed(() => travelHistoryStore.getAllTrips)
+
+onMounted(() => {
+  travelHistoryStore.fetchTrips()
+})
 
 const goBack = () => {
   router.back()
@@ -42,9 +46,9 @@ const viewRouteAgain = (trip) => {
   })
 }
 
-const clearHistory = () => {
+const clearHistory = async () => {
   if (confirm('¿Estás seguro de eliminar el historial de viajes? (Las rutas de ejemplo se mantendrán)')) {
-    travelHistoryStore.clearHistory()
+    await travelHistoryStore.clearHistory()
   }
 }
 

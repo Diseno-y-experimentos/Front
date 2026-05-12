@@ -3,7 +3,7 @@ import { useSavedRoutesStore } from '@/stores/useSavedRoutesStore'
 import { useNotificationsStore } from '@/stores/useNotificationsStore'
 import { useTravelHistoryStore } from '@/stores/useTravelHistoryStore'
 import { useI18n } from 'vue-i18n'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 
 const { t } = useI18n()
 const savedRoutesStore = useSavedRoutesStore()
@@ -20,20 +20,27 @@ const emit = defineEmits(['save-route'])
 
 const isSaving = ref(false)
 const saveMessage = ref('')
+const isSaveSuccess = computed(() => saveMessage.value.includes('guardada'))
 
-const saveRoute = () => {
+const getRouteId = () => {
+  return props.routeData?.id ?? props.routeData?.Id ?? props.routeData?.routeId ?? null
+}
+
+const saveRoute = async () => {
   isSaving.value = true
   saveMessage.value = ''
 
   const routeToSave = {
     origin: props.origin,
     destination: props.destination,
+    routeId: getRouteId(),
+    routeData: props.routeData
   }
 
-  const success = savedRoutesStore.addRoute(routeToSave)
+  const success = await savedRoutesStore.addRoute(routeToSave)
 
   if (success) {
-    notificationsStore.addNotification({
+    await notificationsStore.addNotification({
       type: 'success',
       message: `Ruta guardada: ${props.origin} → ${props.destination}`,
       priority: 'low',
@@ -68,15 +75,28 @@ const openInGoogleMaps = () => {
 
 onMounted(() => {
   // Agregar al historial de viajes automáticamente
-  travelHistoryStore.addTrip({
+  void travelHistoryStore.addTrip({
     origin: props.origin,
     destination: props.destination,
-    steps: [], // Puedes agregar pasos si tienes esa info
+    routeId: getRouteId(),
+    routeData: props.routeData,
+    steps: extractStepsFromRouteData(props.routeData),
   })
 })
 
 const extractStepsFromRouteData = (routeData) => {
-  return []
+  const waypoints = routeData?.Waypoints ?? routeData?.waypoints ?? []
+
+  if (Array.isArray(waypoints) && waypoints.length > 0) {
+    return waypoints.map((waypoint, index) => ({
+      type: 'stop',
+      name: waypoint.Name ?? waypoint.name ?? `Punto ${index + 1}`,
+      mode: 'stop',
+      order: waypoint.Order ?? waypoint.order ?? index + 1
+    }))
+  }
+
+  return routeData?.steps ?? []
 }
 </script>
 
